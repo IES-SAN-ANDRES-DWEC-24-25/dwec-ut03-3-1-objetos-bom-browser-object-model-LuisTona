@@ -19,7 +19,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const url = document.getElementById("inputUrl");
   const btnBack = document.getElementById("btnBack");
   const btnForward = document.getElementById("btnForward");
+  const btnRedirection = document.getElementById("btnRedirection");
   const redirection = document.getElementById("redirection");
+  // Añadido, comprobacion red
+  const btnConexion = document.getElementById("btnConexion");
 
   // Añadir eventos click a los botones
 
@@ -30,60 +33,118 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Redirecciona a la URL introducida en el input a la nueva ventana mywindow
   btnUrl.addEventListener("click", function () {
+
     // si la URL no está vacía, redireccionar a www.educa.jcyl.es"
+    redirect(url.value);
   });
 
   // Cierra la ventana emergente mywindow
-  btnClose.addEventListener("click", function () {});
+  btnClose.addEventListener("click", function () {
+    myWindow.close()
+  });
 
   // Retroceder en la historia del navegador
-  btnBack.addEventListener("click", function () {});
+  btnBack.addEventListener("click", function () {
+    history.back();
+  });
 
   // Avanzar en la historia del navegador
-  btnForward.addEventListener("click", function () {});
+  btnForward.addEventListener("click", function () {
+    history.forward();
+  });
 
   // Temoporizador
   btnStartTimer.addEventListener("click", function () {
     // Iniciar el temporizador timer cada segundo para poner en counter el valor de segundos transcurridos
+    timer = setInterval(()=>{
+      count += 1;
+      document.getElementById('counter').textContent = count;
+    },1000)
   });
-
+  
   btnStopTimer.addEventListener("click", function () {
     // Detener el temporizador timer
+    clearInterval(timer);
+    count = 0;
+    document.getElementById('counter').textContent = count;
   });
-
+  
   btnRedirection.addEventListener("click", function () {
     // avisar en el párrafo redirection que se va a redireccionar a www.educa.jcyl.es en 5 segundos
-    // Redireccionar a la página de la Junta de Castilla y León en una nueva pestaña en 5 segundos
+    redirectionPagina();    
+  });
+
+  btnConexion.addEventListener('click', function(){
+    onLineFunction();
   });
 
   updateScreenSize();
+
 });
+
+// Funcion para comprobar el estado de la red
+function onLineFunction(){
+  const statusDisplay =  document.getElementById('status');
+  
+  if(navigator.onLine){
+    statusDisplay.textContent = "Conectado";
+    statusDisplay.classList.remove('offline');
+  }else{
+    statusDisplay.textContent = "Desconectado";
+    statusDisplay.classList.add('offline');
+  }
+}
 
 // Función para actualizar el tamaño de la pantalla
 function updateScreenSize() {
-  document.getElementById("width").textContent = 0;
-  document.getElementById("height").textContent = 0;
+  document.getElementById("width").textContent = window.innerWidth;
+  document.getElementById("height").textContent = window.innerHeight;
 }
 
 // Evento de cambio de pantalla
 // Si cambia el tamaño de la pantalla, llamamos de nuevo a la función updateScreenSize
 window.onresize = updateScreenSize;
 
-// Eventos de conexión a internet
-/*
-window.addEventListener('COMPLETAR', () => {
-    document.getElementById('status').textContent = 'Desconectado';
-  });
-*/
-
-/*
-  window.addEventListener('COMPLETAR', () => {
-    document.getElementById('status').textContent = 'Conectado';
-  });
-  */
-
 // mostrar la información del navegador en una ventana emergente
-function informacionNavegador() {}
+function informacionNavegador() {
+  alert(
+    'appCodeName: '+navigator.appCodeName+ '\n'+
+    'appName: '+navigator.appName+ '\n'+
+    'appVersion: '+navigator.appVersion+ '\n'+
+    'buildID: '+navigator.buildID+ '\n'+
+    'Idioma: '+navigator.language+'\n'+
+    'pdfViewerEnabled: '+navigator.pdfViewerEnabled+'\n'+
+    'oscpu: '+navigator.oscpu+'\n'+
+    'platform: '+navigator.platform+'\n'+
+    'userAgent: '+navigator.userAgent+'\n'+
+    'product: '+navigator.product+'\n'
+  );
+}
 
 // Función para redireccionar a una URL en una ventana nueva
-function redirect(url) {}
+function redirect(url) {
+  if(url != ""){
+    myWindow = window.open(url, '','popup');
+  }else{
+    myWindow = window.open('https://www.educa.jcyl.es', '', 'popup');
+  }
+}
+// Función para redireccionar a la pagina de la junta
+function redirectionPagina(){
+  let tiempo;
+    count = 4;
+    redirection.textContent = `Se le esta redireccionando a "www.educa.jcyl.es" 5 `;
+    timer = setInterval(()=>{
+      window.open('https://www.educa.jcyl.es');
+      
+      clearInterval(timer);
+      clearInterval(tiempo);
+      
+      redirection.textContent = "";
+    }, 5000);
+
+    tiempo = setInterval(()=>{
+      redirection.textContent = `Se le esta redireccionando a "www.educa.jcyl.es" ${count}`;
+      count -= 1;
+    }, 1000)
+}
