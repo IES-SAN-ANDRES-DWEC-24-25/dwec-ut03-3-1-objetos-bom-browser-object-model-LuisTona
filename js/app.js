@@ -65,8 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
   btnStopTimer.addEventListener("click", function () {
     // Detener el temporizador timer
     clearInterval(timer);
-    count = 0;
-    document.getElementById('counter').textContent = count;
   });
   
   btnRedirection.addEventListener("click", function () {
@@ -132,19 +130,23 @@ function redirect(url) {
 // Función para redireccionar a la pagina de la junta
 function redirectionPagina(){
   let tiempo;
-    count = 4;
+  let abridor;
+  let contador;
+    contador = 4;
+    
     redirection.textContent = `Se le esta redireccionando a "www.educa.jcyl.es" 5 `;
-    timer = setInterval(()=>{
+    
+    abridor = setInterval(()=>{
       window.open('https://www.educa.jcyl.es');
       
-      clearInterval(timer);
+      clearInterval(abridor);
       clearInterval(tiempo);
       
       redirection.textContent = "";
     }, 5000);
 
     tiempo = setInterval(()=>{
-      redirection.textContent = `Se le esta redireccionando a "www.educa.jcyl.es" ${count}`;
-      count -= 1;
-    }, 1000)
+      redirection.textContent = `Se le esta redireccionando a "www.educa.jcyl.es" ${contador}`;
+      contador -= 1;
+    }, 1000);
 }
